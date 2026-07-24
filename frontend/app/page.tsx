@@ -110,7 +110,7 @@ export default function Home() {
         .tabulator-row .tabulator-cell { font-size: 13.5px; padding: 10px 8px; }
       `}</style>
 
-      {/* Sidebar - Recriação do visual Shosp da imagem */}
+      {/* }
       <div className="flex h-full flex-shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.04)] z-20">
         {/* Faixa Azul Esquerda */}
         <div className="w-[70px] bg-[#0FA0EE] flex flex-col items-center py-6 gap-8 text-white relative">
@@ -129,7 +129,7 @@ export default function Home() {
           <div className="p-5 flex items-center justify-between border-b border-[#F1F2F4]">
             <div className="flex items-center gap-2 text-[#0FA0EE]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-              <span className="text-2xl font-bold tracking-tight">Shosp</span>
+              <span className="text-2xl font-bold tracking-tight">Time Saver Agendamento</span>
             </div>
             <button className="bg-[#44B2F1] text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-[#0FA0EE] transition-colors">ADICIONAR ⊕</button>
           </div>
