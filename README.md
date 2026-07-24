@@ -19,7 +19,7 @@ https://github.com/joaorodriguesdev-detect/agenda_medica.git
 
 <br>
 
-# ⏱️ **Time Saver — Agenda Médica Inteligente**
+# ⏱️ **SauTech — Agenda Médica Inteligente**
 
 [![Stack](https://img.shields.io/badge/Stack-Docker%20%7C%20Flask%20%7C%20Next.js%20%7C%20TypeScript-16324F?style=for-the-badge&logo=Color=white)](https://github.com)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019%20%7C%20Tailwind%204-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
@@ -56,7 +56,7 @@ https://github.com/joaorodriguesdev-detect/agenda_medica.git
 
 ## 🎯 **Visão Geral**
 
-O **Time Saver** é uma aplicação web full-stack para **gestão de agendas médicas**, desenvolvida com foco em:
+O **SauTech Agendamentos** é uma aplicação web full-stack para **gestão de agendas médicas**, desenvolvida com foco em:
 
 - ✅ **Visualização centralizada** de agendamentos de pacientes
 - ✅ **Interface moderna e responsiva** com experiência de usuário premium
@@ -580,7 +580,7 @@ A tela de login foi projetada como um **splash de produto**, não um simples for
 │  │                     │  │                        │  │
 │  │   ☰ Painel Marca    │  │  🖊️ Formulário Login   │  │
 │  │                     │  │                        │  │
-│  │   ⏱️ Time Saver     │  │  BEM-VINDO DE VOLTA    │  │
+│  │   ⏱️ Sautech     │  │  BEM-VINDO DE VOLTA    │  │
 │  │                     │  │                        │  │
 │  │   "Cada minuto      │  │  👤 Usuário ou e-mail  │  │
 │  │    da sua agenda,   │  │  🔒 Senha              │  │

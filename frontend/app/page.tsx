@@ -122,9 +122,8 @@ export default function Home() {
           <div className="p-5 flex items-center justify-between border-b border-[#F1F2F4]">
             <div className="flex items-center gap-2 text-[#0FA0EE]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-              <span className="text-xl font-bold tracking-tight">Time Save Agendamentos</span>
+              <span className="text-xl font-bold tracking-tight">SauTech Agendamentos</span>
             </div>
-            <button className="bg-[#44B2F1] text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-[#0FA0EE] transition-colors">ADICIONAR ⊕</button>
           </div>
 
           <div className="p-5 border-b border-[#F1F2F4]">
@@ -205,33 +204,31 @@ export default function Home() {
               <div className="grid grid-cols-4 flex-1">
                 <div className="border-r border-[#E7E9EC] relative p-3">
                   <div className="absolute top-[80px] w-[calc(100%-24px)] bg-[#359CFB] text-white p-3 rounded-md shadow-sm">
-                    <div className="h-2 w-8 bg-white/30 rounded-full mb-3"></div>
-                    <div className="h-2 w-20 bg-white/30 rounded-full"></div>
+                    <div className="text-xs font-bold mb-1">10:00 - Carlos Andrade</div>
+                    <div className="text-[10px] text-white/90">Ortopedia • Unimed</div>
                   </div>
                   <div className="absolute top-[320px] w-[calc(100%-24px)] bg-[#359CFB] text-white p-3 rounded-md shadow-sm">
-                    <div className="flex gap-2 mb-3">
-                      <div className="h-2 w-8 bg-white/30 rounded-full"></div>
-                      <div className="h-2 w-8 bg-white/30 rounded-full"></div>
-                    </div>
+                    <div className="text-xs font-bold mb-1">14:30 - Mariana Costa</div>
+                    <div className="text-[10px] text-white/90">Cardiologia • Bradesco</div>
                   </div>
                 </div>
 
                 <div className="border-r border-[#E7E9EC] relative p-3">
                   <div className="absolute top-[40px] w-[calc(100%-24px)] bg-[#FCB80F] text-white p-3 rounded-md shadow-sm h-[80px]">
-                    <div className="h-2 w-16 bg-white/40 rounded-full mb-3"></div>
-                    <div className="h-2 w-24 bg-white/40 rounded-full"></div>
+                    <div className="text-xs font-bold mb-1">08:00 - Ana Souza</div>
+                    <div className="text-[10px] text-white/90">Dermatologia • Particular</div>
                   </div>
                   <div className="absolute top-[220px] w-[calc(100%-24px)] bg-[#FF7E78] text-white p-3 rounded-md shadow-sm h-[120px]">
-                    <div className="h-2 w-12 bg-white/50 rounded-full mb-4"></div>
-                    <div className="h-2 w-20 bg-white/50 rounded-full mb-4"></div>
-                    <div className="h-2 w-16 bg-white/50 rounded-full"></div>
+                    <div className="text-xs font-bold mb-1">11:00 - Felipe Mendes</div>
+                    <div className="text-[10px] text-white/90">Ortopedia • Particular</div>
+                    <div className="mt-2 inline-block bg-white/20 px-2 py-0.5 rounded text-[10px] font-semibold">Cancelado</div>
                   </div>
                 </div>
 
                 <div className="border-r border-[#E7E9EC] relative p-3">
                   <div className="absolute top-[320px] w-[calc(100%-24px)] bg-[#7C8CD6] text-white p-3 rounded-md shadow-sm h-[120px]">
-                    <div className="h-2 w-24 bg-white/40 rounded-full mb-4"></div>
-                    <div className="h-2 w-12 bg-white/40 rounded-full"></div>
+                    <div className="text-xs font-bold mb-1">15:00 - Roberto Alves</div>
+                    <div className="text-[10px] text-white/90">Clínico Geral • SulAmérica</div>
                   </div>
                 </div>
 

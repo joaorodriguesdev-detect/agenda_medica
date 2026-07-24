@@ -6,8 +6,6 @@ import { Space_Grotesk, Inter } from "next/font/google";
 const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
 const body = Inter({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
 
-// Marca: relógio minimalista com ponteiros animados — a mesma referência
-// visual usada na agenda, reforçando "Time Saver" logo na porta de entrada.
 function ClockMark({ size = 32, tone = "#16324F" }: { size?: number; tone?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
