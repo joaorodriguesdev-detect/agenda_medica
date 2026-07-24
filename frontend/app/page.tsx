@@ -76,8 +76,8 @@ export default function Home() {
         </header>
 
         <main className="flex-1 overflow-auto bg-[#F6F7F9]">
-          {visao === 'calendario' ? (
-            <CalendarView />
+        {visao === 'calendario' ? (
+            <CalendarView agendamentos={agendamentos} />
           ) : (
             <TabulatorView agendamentos={agendamentos} carregando={carregando} erroApi={erroApi} buscaGlobal={buscaGlobal} />
           )}
