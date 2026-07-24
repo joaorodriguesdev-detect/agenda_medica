@@ -69,7 +69,7 @@ export default function Home() {
       <header className="h-auto min-h-[76px] py-4 bg-white border-b border-[#E7E9EC] flex flex-col md:flex-row items-center justify-between px-4 md:px-8 z-10 gap-4">
           <div className="flex bg-[#F1F2F4] p-1 rounded-lg border border-[#E7E9EC]">
             <button onClick={() => setVisao('calendario')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'calendario' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Visualização de Calendário</button>
-            <button onClick={() => setVisao('tabela')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'tabela' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Lista Tabulator (Oficial)</button>
+            <button onClick={() => setVisao('tabela')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'tabela' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Lista Agendamentos</button>
           </div>
           
           <button onClick={async () => { await fetch("http://localhost:5000/api/logout", { method: "POST" }); router.push("/login"); }} className="text-sm font-medium text-[#5B6472] hover:text-[#A23B2F] transition-colors">Encerrar Sessão</button>

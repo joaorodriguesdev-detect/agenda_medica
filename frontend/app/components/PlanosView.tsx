@@ -116,7 +116,7 @@ export default function PlanosView() {
                 
                 <div className="pt-4 border-t border-[#F1F2F4] flex justify-between items-center">
                   <span className="text-sm text-[#5B6472]"><strong className="text-[#1C2530]">{conv.pacientes}</strong> pacientes</span>
-                  <button className="text-[#0FA0EE] text-sm font-semibold hover:underline">Configurar</button>
+                  <button className="text-[#0FA0EE] text-sm font-semibold hover:underline">Editar</button>
                 </div>
               </div>
             );
