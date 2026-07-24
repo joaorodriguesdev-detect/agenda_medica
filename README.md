@@ -16,6 +16,749 @@
 
 <br>
 
+# 🏥 **SauTech — Plataforma de Gestão de Saúde**
+
+[![Stack](https://img.shields.io/badge/Stack-Docker%20%7C%20Flask%20%7C%20Next.js%20%7C%20TypeScript-0FA0EE?style=for-the-badge)](https://github.com)
+[![Frontend](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019%20%7C%20Tailwind%204-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Backend](https://img.shields.io/badge/Backend-Flask%203.0%20%7C%20SQLAlchemy%20%7C%20SQLite-16324F?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com)
+[![Infra](https://img.shields.io/badge/Infra-Docker%20Compose%20%7C%20Multi--Service-2496ED?style=for-the-badge&logo=docker)](https://docker.com)
+
+### ✨ *Tecnologia que simplifica a gestão da sua clínica.* ✨
+
+<br>
+</div>
+
+---
+
+## 📋 **Sumário**
+
+- [🎯 Visão Geral](#-visão-geral)
+- [🏗️ Arquitetura do Projeto](#️-arquitetura-do-projeto)
+- [🆕 O que Mudou — Changelog da Refatoração](#-o-que-mudou--changelog-da-refatoração)
+- [🛠️ Stack Tecnológica](#️-stack-tecnológica)
+- [📁 Estrutura de Diretórios](#-estrutura-de-diretórios)
+- [🐳 Docker — Orquestração Completa](#-docker--orquestração-completa)
+- [⚙️ Backend — Flask (API REST)](#️-backend--flask-api-rest)
+- [🎨 Frontend — Next.js + TypeScript + Componentes](#-frontend--nextjs--typescript--componentes)
+- [🧩 Sistema de Componentes — Arquitetura](#-sistema-de-componentes--arquitetura)
+- [🔐 Autenticação & Sessão](#-autenticação--sessão)
+- [🖥️ As 4 Telas do SauTech](#️-as-4-telas-do-sautech)
+- [🧪 Testes Automatizados](#-testes-automatizados)
+- [🌱 Seed de Dados](#-seed-de-dados)
+- [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
+- [💡 Tomada de Decisões Técnicas](#-tomada-de-decisões-técnicas)
+- [🧰 Comandos Úteis](#-comandos-úteis)
+
+---
+
+## 🎯 **Visão Geral**
+
+O **SauTech** evoluiu de uma simples agenda médica para uma **plataforma completa de gestão de saúde**, com **4 telas integradas**, arquitetura componentizada e backend com models ORM completos.
+
+### ✨ **O que fazemos agora**
+
+| Funcionalidade | Descrição | Status |
+|----------------|-----------|:------:|
+| 📅 **Calendário Visual** | Cards coloridos com agendamentos DINÂMICOS (filtrados por data real) | ✅ Novo |
+| 📊 **Tabela Tabulator** | Grid Profissional com filtro global OR + placeholders customizados | ✅ Refatorado |
+| 🏥 **Convênios (CRUD)** | Tela de gerenciamento com cards, status dinâmicos e criação via modal | 🆕 Novo |
+| 📈 **Dashboard Métricas** | KPIs em tempo real, funil de atendimento, ranking de convênios | 🆕 Novo |
+| 🗺️ **Sidebar Navegável** | Clique nos ícones para trocar de tela + mini calendário DINÂMICO (data real) | ✅ Refatorado |
+| ➕ **Novo Agendamento** | Modal funcional com formulário completo + adição em tempo real | 🆕 Novo |
+| 🔐 **Autenticação** | Login hardcoded (admin) + rotas de convênios protegidas | ✅ Simplificado |
+
+> 🔑 **Login:** `admin@timesaver.com` | **Senha:** `123456`
+
+---
+
+## 🏗️ **Arquitetura do Projeto**
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                          🌐 ARQUITETURA SAUTECH                           │
+│                                                                            │
+│    ┌────────────────────────────────────────────────────────────┐         │
+│    │                    DOCKER COMPOSE                           │         │
+│    │  ┌───────────────────────┐      ┌────────────────────────┐ │         │
+│    │  │                       │      │                        │ │         │
+│    │  │   🐍 Flask Backend    │◄────►│   ⚛️  Next.js Frontend │ │         │
+│    │  │   Porta :5000         │ REST │   Porta :3000 (SSR)    │ │         │
+│    │  │                       │      │                        │ │         │
+│    │  └───────────┬───────────┘      └───────────┬────────────┘ │         │
+│    │              │                               │              │         │
+│    │              ▼                               ▼              │         │
+│    │    ┌──────────────────┐           ┌──────────────────────┐  │         │
+│    │    │   SQLite + ORM   │           │    🧩 COMPONENTES    │  │         │
+│    │    │  ┌────────────┐  │           │                      │  │         │
+│    │    │  │ User       │  │           │  🗺️ Sidebar.tsx     │  │         │
+│    │    │  │ Agendamento│  │           │  📅 CalendarView    │  │         │
+│    │    │  │ Convenio   │  │           │  📊 TabulatorView   │  │         │
+│    │    │  └────────────┘  │           │  🏥 PlanosView      │  │         │
+│    │    └──────────────────┘           │  📈 DashboardView   │  │         │
+│    └───────────────────────────────────────────────────────────┘         │
+│                                                                            │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🆕 **O que Mudou — Changelog da Refatoração**
+
+### 🔄 **Evolução: Monólito → Componentes**
+
+```
+ANTES (v1 - Monolítico)              DEPOIS (v2 - Componentizado)
+═══════════════════════              ═════════════════════════════
+
+📁 frontend/app/                     📁 frontend/app/
+├── page.tsx  ← 600 linhas           ├── page.tsx  ← ~80 linhas (orquestrador)
+├── login/page.tsx                   ├── login/page.tsx
+└── layout.tsx                       ├── layout.tsx
+                                     └── 📁 components/          ← 🆕
+                                         ├── Sidebar.tsx         ← Extraído
+                                         ├── CalendarView.tsx    ← Extraído + Dinâmico
+                                         ├── TabulatorView.tsx   ← Extraído + Filtro OR
+                                         ├── PlanosView.tsx      ← 🆕 Novo!
+                                         └── DashboardView.tsx   ← 🆕 Novo!
+```
+
+### 📋 **Mudanças Detalhadas**
+
+| # | O que mudou | Antes | Depois |
+|---|-------------|-------|--------|
+| 1 | **page.tsx** | Monolítico (~600 linhas) | Orquestrador (~80 linhas) que renderiza componentes |
+| 2 | **Sidebar** | Fixa, não navegável | Navegável por clique + mini calendário DINÂMICO (data real) |
+| 3 | **Novo Agendamento** | Botão não funcional | Modal com formulário real + `handleSalvar()` |
+| 4 | **CalendarView** | Dados hardcoded (28,29,30,31) | **Dinâmico** — filtra `agendamentos` prop pela data |
+| 5 | **TabulatorView** | Inline no page.tsx | Componente separado + filtro global OR (paciente OU CPF OU médico) |
+| 6 | **PlanosView** 🆕 | Não existia | CRUD de convênios com cards, modal, GET/POST `/api/convenios` |
+| 7 | **DashboardView** 🆕 | Não existia | KPIs, funil de barras, ranking de convênios |
+| 8 | **Login** | Usava User model + Flask-Login | **Hardcoded** (admin@timesaver.com / 123456) — simplificado |
+| 9 | **Backend routes** | Usava services.py + mock API | **DADOS_REAIS** em memória + 2 novas rotas (`/api/convenios` GET/POST) |
+| 10 | **models.py** | Só User | User + **Agendamento** + **Convenio** (3 models ORM) |
+| 11 | **db.create_all()** | Manual (seed.py) | Automático no `app_context` do `__init__.py` |
+| 12 | **Branding Sidebar** | "SauTech" | "Time Save" |
+| 13 | **CORS** | Com `resources={}` | Simplificado: `CORS(app, supports_credentials=True)` |
+| 14 | **Ícone Close** 🆕 | Não existia | Adicionado ao sistema de ícones SVG |
+
+---
+
+## 🛠️ **Stack Tecnológica**
+
+### 🐳 **Infraestrutura**
+
+```
+📦 Docker
+├── 🐳 Docker Compose
+│   ├── 🏗️ Dockerfile Backend (Python 3.11-slim)
+│   └── 🏗️ Dockerfile Frontend (Node 20-alpine)
+```
+
+### ⚙️ **Backend**
+
+```
+🐍 Python 3.11
+├── 🌶️ Flask 3.0.3
+├── 🗄️ Flask-SQLAlchemy 3.1.1 (3 Models: User, Agendamento, Convenio)
+├── 🔐 Flask-Login 0.6.3
+├── 🔗 Flask-Cors 4.0.0
+├── 🔑 Werkzeug 3.0.3
+├── 🌐 Requests 2.32.3
+└── 🧪 Pytest 8.2.2
+```
+
+### 🎨 **Frontend**
+
+```
+⚛️ Next.js 16.2.11 (App Router)
+├── 🟦 TypeScript 5.x (strict mode)
+├── 🎭 React 19.2.4
+├── 🎨 Tailwind CSS 4 (@tailwindcss/postcss)
+├── 📊 React-Tabulator 0.21.0 + Tabulator 6.5.2
+├── 🔤 Geist, Space Grotesk, Inter, IBM Plex Mono
+└── 🧩 5 Componentes (Sidebar, Calendar, Tabulator, Planos, Dashboard)
+```
+
+---
+
+## 📁 **Estrutura de Diretórios**
+
+```
+📦 sautech/
+├── 🐳 docker-compose.yml
+│
+├── 🐍 backend/
+│   ├── 🏗️ Dockerfile
+│   ├── 📄 requirements.txt
+│   ├── ▶️ run.py
+│   ├── 🗄️ agenda.db
+│   ├── 📄 .env
+│   │
+│   ├── 📁 app/
+│   │   ├── __init__.py      # Factory + db.create_all() automático
+│   │   ├── config.py        # Config (SECRET_KEY, DB, API_MOCK_URL)
+│   │   ├── models.py        # 🆕 User + Agendamento + Convenio
+│   │   ├── routes.py        # 🆕 DADOS_REAIS + /api/convenios + login hardcoded
+│   │   └── services.py      # Legado (fetch_agendamentos via requests)
+│   │
+│   ├── 📁 scripts/
+│   │   └── seed.py          # 🆕 Agora cria User + Agendamentos + Convenios
+│   │
+│   └── 📁 tests/
+│       ├── test_auth.py
+│       └── test_agenda.py
+│
+└── ⚛️ frontend/
+    ├── 🏗️ Dockerfile
+    ├── 📄 package.json
+    ├── 📄 next.config.ts
+    ├── 📄 tsconfig.json
+    ├── 📄 postcss.config.mjs
+    │
+    ├── 📁 app/
+    │   ├── globals.css
+    │   ├── layout.tsx         # Metadata: "Sautech Agendamento"
+    │   ├── page.tsx           # 🆕 Orquestrador (~80 linhas)
+    │   │
+    │   ├── 📁 login/
+    │   │   └── page.tsx       # Login com ClockMark + Sautech branding
+    │   │
+    │   └── 📁 components/     # 🆕 TODOS OS COMPONENTES AQUI!
+    │       ├── Sidebar.tsx       # Sidebar navegável + mini calendário dinâmico
+    │       ├── CalendarView.tsx  # Calendário DINÂMICO com cards coloridos
+    │       ├── TabulatorView.tsx # Tabela com filtro OR global
+    │       ├── PlanosView.tsx    # 🆕 CRUD de convênios
+    │       └── DashboardView.tsx # 🆕 KPIs + funil + ranking
+    │
+    └── 📁 public/
+```
+
+---
+
+## 🐳 **Docker — Orquestração Completa**
+
+```yaml
+# docker-compose.yml
+services:
+  backend:
+    build: ./backend
+    container_name: timesaver_backend
+    ports: ["5000:5000"]
+    env_file: ./backend/.env
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: timesaver_frontend
+    ports: ["3000:3000"]
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    depends_on:
+      - backend
+```
+
+---
+
+## ⚙️ **Backend — Flask (API REST)**
+
+### 🧠 **Application Factory + Auto Migration**
+
+```python
+# app/__init__.py
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+    
+    CORS(app, supports_credentials=True)  # Simplificado!
+    
+    db.init_app(app)
+    login_manager.init_app(app)
+    
+    with app.app_context():
+        from . import models 
+        db.create_all()  # 🆗 Automático na inicialização!
+    
+    from .routes import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+    
+    return app
+```
+
+### 🗄️ **3 Models ORM**
+
+```python
+# app/models.py
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
+
+class Agendamento(db.Model):                       # 🆕
+    __tablename__ = 'agendamentos'
+    id = db.Column(db.Integer, primary_key=True)
+    paciente = db.Column(db.String(100), nullable=False)
+    cpf = db.Column(db.String(14), nullable=False)
+    medico = db.Column(db.String(100), nullable=False)
+    especialidade = db.Column(db.String(100), nullable=False)
+    data = db.Column(db.String(10), nullable=False)
+    horario = db.Column(db.String(5), nullable=False)
+    convenio = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+
+    def to_dict(self):
+        return {"paciente": self.paciente, "cpf": self.cpf, ...}
+
+class Convenio(db.Model):                           # 🆕
+    __tablename__ = 'convenios'
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    cobertura = db.Column(db.String(100), nullable=False)
+    pacientes = db.Column(db.Integer, default=0)
+    status = db.Column(db.String(50), nullable=False)
+```
+
+### 🛣️ **Rotas da API**
+
+| Método | Rota | Descrição | Auth | Fonte |
+|--------|------|-----------|:----:|-------|
+| POST | `/api/login` | Login hardcoded (`admin@timesaver.com / 123456`) | ❌ | Código fixo |
+| POST | `/api/logout` | Logout (não requer mais `@login_required`) | ❌ | Simplificado |
+| GET | `/api/agendamentos` | Lista 5 agendamentos reais em memória | ❌ | `DADOS_REAIS` |
+| GET | `/api/convenios` | 🆕 Lista convênios do banco (model `Convenio`) | ❌ | ORM |
+| POST | `/api/convenios` | 🆕 Cria novo convênio | ❌ | ORM |
+| GET | `/api/mock/agendamentos` | Mock legado (não usado pelas rotas principais) | ❌ | Legado |
+
+#### 🔐 Login Simplificado (Hardcoded)
+
+```python
+# routes.py — Não usa mais User model!
+@main.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    if data and data.get('identificador') == 'admin@timesaver.com' and data.get('senha') == '123456':
+        return jsonify({"status": "success", "message": "Login realizado", "user": "admin"}), 200
+    return jsonify({"status": "error", "message": "Credenciais inválidas."}), 401
+```
+
+> 💡 **Motivação:** Simplificação para desenvolvimento — sem depender de banco para testar login.
+
+#### 📦 DADOS_REAIS — Base em Memória
+
+```python
+# routes.py
+DADOS_REAIS = [
+    {"data": "2026-09-28", "horario": "10:00", "paciente": "Carlos Andrade",
+     "cpf": "111.111.111-11", "medico": "Dr. Roberto Alves",
+     "especialidade": "Ortopedia", "convenio": "Unimed", "status": "Confirmado"},
+    {"data": "2026-09-28", "horario": "14:30", "paciente": "Mariana Costa",
+     "cpf": "222.222.222-22", ...},
+    {"data": "2026-09-29", "horario": "08:00", "paciente": "Ana Souza", ...},
+    {"data": "2026-09-29", "horario": "11:00", "paciente": "Felipe Mendes",
+     "status": "Cancelado"},
+    {"data": "2026-09-30", "horario": "15:00", "paciente": "Roberto Alves",
+     "status": "Concluído"}
+]
+```
+
+---
+
+## 🎨 **Frontend — Next.js + TypeScript + Componentes**
+
+### 🧩 **Arquitetura de Componentes**
+
+```
+📁 components/
+│
+├── 🗺️ Sidebar.tsx          ← Gerencia: navegação, busca global, mini calendário, +agendamento
+├── 📅 CalendarView.tsx     ← Renderiza: cards coloridos por data (dinâmico)
+├── 📊 TabulatorView.tsx    ← Renderiza: grid profissional com filtro OR
+├── 🏥 PlanosView.tsx       ← Renderiza: cards de convênios + modal de criação
+└── 📈 DashboardView.tsx    ← Renderiza: KPIs, barras de funil, ranking
+
+📄 page.tsx (Orquestrador)
+├── State: agendamentos, erroApi, carregando, visao, buscaGlobal
+├── Effects: fetch(/api/agendamentos) no mount
+├── Handlers: adicionarAgendamento()
+└── Render:
+    ├── <Sidebar />           ← Props: setBuscaGlobal, adicionarAgendamento, setVisao
+    ├── <header />            ← Toggle [Calendário | Tabela] + Logout
+    └── <main>
+        ├── {visao === 'calendario' && <CalendarView />}
+        ├── {visao === 'tabela' && <TabulatorView />}
+        ├── {visao === 'planos' && <PlanosView />}
+        └── {visao === 'dashboard' && <DashboardView />}
+```
+
+### 🆕 **Sidebar.tsx — O Centro de Comando**
+
+```typescript
+// Props que recebe do page.tsx
+interface SidebarProps {
+  setBuscaGlobal: (valor: string) => void;
+  adicionarAgendamento: (novo: any) => void;
+  setVisao: (visao: string) => void;
+}
+```
+
+**Funcionalidades:**
+
+| Funcionalidade | Detalhes |
+|----------------|----------|
+| 🗺️ **Navegação** | Clique nos ícones → muda `visao` (calendar, heart=planos, chart=dashboard) |
+| 🔍 **Busca Global** | Input → `setBuscaGlobal` → filtro OR no TabulatorView |
+| ➕ **Novo Agendamento** | Modal com 6 campos: Paciente, CPF, Convênio, Médico, Data, Horário |
+| 📅 **Mini Calendário** | **Agora DINÂMICO!** Baseado na data real do sistema (mês/ano/dia atuais) |
+| 🏥 **Branding** | "Time Save" no rodapé + ícone de coração |
+
+**Mini Calendário Dinâmico:**
+
+```typescript
+// Sidebar.tsx — Lógica que gera o calendário automaticamente
+const hoje = new Date();
+const mesAtual = hoje.getMonth();
+const anoAtual = hoje.getFullYear();
+const diaAtual = hoje.getDate();
+
+const primeiroDiaDaSemana = new Date(anoAtual, mesAtual, 1).getDay();
+const ultimoDiaDoMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
+
+// Gera array com nulls para dias vazios + números para dias reais
+const diasCalendario = [];
+for (let i = 0; i < primeiroDiaDaSemana; i++) diasCalendario.push(null);
+for (let i = 1; i <= ultimoDiaDoMes; i++) diasCalendario.push(i);
+```
+
+> ✅ **Antes:** Setembro 2026 fixo
+> ✅ **Agora:** Qualquer mês/ano — o calendário se adapta automaticamente!
+
+### 🆕 **PlanosView.tsx — Gestão de Convênios**
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  Convênios Credenciados                    [+ Adicionar Convênio]  │
+│  Gerencie os planos de saúde aceitos pela clínica.                   │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐   │
+│  │ [U]              │  │ [B]              │  │ [P]              │   │
+│  │ Unimed           │  │ Bradesco Saúde   │  │ Particular       │   │
+│  │ Cobertura Nac.   │  │ Cobertura Reg.   │  │ Cobertura Local  │   │
+│  │ 🟢 Ativo         │  │ 🟡 Em Análise    │  │ 🔴 Inativo       │   │
+│  │ 150 pacientes    │  │ 80 pacientes     │  │ 0 pacientes      │   │
+│  │ [Configurar]     │  │ [Configurar]     │  │ [Configurar]     │   │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘   │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**Comunicação com API:**
+
+| Ação | Método | Rota | Descrição |
+|------|--------|------|-----------|
+| Listar | GET | `/api/convenios` | Carrega todos os convênios |
+| Criar | POST | `/api/convenios` | Cria novo com `{nome, cobertura, status}` |
+
+**Modal de Criação:**
+
+```
+┌────────────────────────────────────┐
+│  Novo Convênio                  [X]│
+├────────────────────────────────────┤
+│  Nome do Convênio                  │
+│  [Unimed________________________] │
+│  Área de Cobertura                 │
+│  [Nacional______________________] │
+│  Status Inicial                    │
+│  [Ativo ▼]                        │
+├────────────────────────────────────┤
+│  [Cancelar]    [Salvar Convênio]   │
+└────────────────────────────────────┘
+```
+
+### 🆕 **DashboardView.tsx — Métricas em Tempo Real**
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  Dashboard de Métricas                                               │
+│  Visão geral do desempenho da clínica                                │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐            │
+│  │ TOTAL    │  │ CONFIRM. │  │ PENDENTE │  │ CANCELA. │            │
+│  │    5     │  │    2     │  │    1     │  │    1     │            │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘            │
+│                                                                      │
+│  ┌─────────────────────────┐  ┌─────────────────────────┐           │
+│  │ FUNIL DE ATENDIMENTO    │  │ CONVÊNIOS MAIS USADOS   │           │
+│  │                         │  │                         │           │
+│  │ Confirmados  ████  40%  │  │ 1º Unimed     2 consultas│          │
+│  │ Concluídos   ██    20%  │  │ 2º Particular 1 consulta │          │
+│  │ Pendentes    ██    20%  │  │ 3º Bradesco   1 consulta │          │
+│  │ Cancelados   ██    20%  │  │                         │           │
+│  └─────────────────────────┘  └─────────────────────────┘           │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**KPIs Calculados:**
+
+```typescript
+const total = agendamentos.length;
+const confirmados = agendamentos.filter(a => a.status.includes('confirmado')).length;
+const cancelados = agendamentos.filter(a => a.status.includes('cancelado')).length;
+const concluidos = agendamentos.filter(a => a.status.includes('concluído')).length;
+const pendentes = agendamentos.filter(a => a.status.includes('pendente')).length;
+```
+
+---
+
+## 🔐 **Autenticação & Sessão**
+
+### Tela de Login — Sautech Branding
+
+```
+┌──────────────────────────────────────────────────────┐
+│  ┌─────────────────────┐  ┌────────────────────────┐  │
+│  │   ⏱️ Sautech        │  │  BEM-VINDO DE VOLTA    │  │
+│  │                     │  │                        │  │
+│  │   "Cada minuto da   │  │  👤 Usuário ou e-mail  │  │
+│  │    sua agenda, no   │  │  🔒 Senha              │  │
+│  │    lugar certo."    │  │  👁️ Mostrar/ocultar    │  │
+│  │                     │  │                        │  │
+│  │   Fundo azul        │  │  [      Entrar      ] │  │
+│  │   + clock animado   │  │                        │  │
+│  └─────────────────────┘  └────────────────────────┘  │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🧪 **Testes Automatizados**
+
+```
+📁 tests/
+├── test_auth.py
+│   ├── test_login_valido()     → ✅ 200
+│   └── test_login_invalido()   → ✅ Mensagem de erro
+│
+└── test_agenda.py
+    └── test_falha_api_agendamentos()
+        → ✅ status == 'error', data == [], mensagem de indisponibilidade
+```
+
+---
+
+## 🌱 **Seed de Dados**
+
+```bash
+$ docker exec -it timesaver_backend python scripts/seed.py
+
+# ✅ Cria User: admin@timesaver.com / 123456
+# ✅ Cria Agendamentos: Carlos, Mariana, Felipe (no banco SQLite)
+# ✅ Cria Convenios no banco
+```
+
+---
+
+## 🚀 **Como Executar o Projeto**
+
+```bash
+# 1️⃣ Clone
+git clone https://github.com/seu-usuario/sautech.git
+cd sautech
+
+# 2️⃣ Build + Start
+docker compose up -d --build
+
+# 3️⃣ Seed
+docker exec -it timesaver_backend python scripts/seed.py
+
+# 4️⃣ Acesse
+open http://localhost:3000
+
+# 5️⃣ Login
+#    📧 admin@timesaver.com
+#    🔑 123456
+```
+
+### 🛑 **Gerenciamento**
+
+```bash
+# Logs
+docker compose logs -f
+
+# Parar
+docker compose down
+
+# Reset total
+docker compose down -v && docker compose up -d && docker exec -it timesaver_backend python scripts/seed.py
+
+# Testes
+docker exec -it timesaver_backend python -m pytest tests/ -v
+```
+
+---
+
+## 💡 **Tomada de Decisões Técnicas**
+
+### 🆕 **Por que componentizar?**
+
+```
+ANTES (Monólito)                  DEPOIS (Componentes)
+══════════════════                ═════════════════════
+❌ page.tsx com 600+ linhas       ✅ page.tsx com ~80 linhas
+❌ Sidebar fixa                   ✅ Sidebar com props reativas
+❌ Calendário hardcoded           ✅ CalendarView dinâmico
+❌ Sem tela de convênios          ✅ PlanosView com CRUD real
+❌ Sem métricas                   ✅ DashboardView com KPIs
+❌ Dificuldade de manutenção      ✅ Cada componente独立
+❌ Reaproveitamento zero          ✅ Componentes reutilizáveis
+```
+
+### 🆕 **Por que login hardcoded?**
+
+| Abordagem | Prós | Contras |
+|-----------|------|---------|
+| ✅ **Hardcoded** | Zero dependência de banco para testar | Menos seguro para produção |
+| ❌ ORM + BD | Segurança real | Setup extra para testes |
+
+> 💡 Para MVP/desenvolvimento, hardcoded acelera o ciclo. Para produção, voltar ao modelo ORM.
+
+### 🆕 **Por que DADOS_REAIS em memória?**
+
+```
+✅ Resposta instantânea (sem banco)
+✅ Dados consistentes entre requisições
+✅ Ideal para desenvolvimento frontend
+🔄 Fácil de substituir por consulta SQL futuramente
+```
+
+### 🆕 **Por que 4 visões separadas?**
+
+```
+📋 CHART (DashboardView) ← Visão executiva
+📅 CALENDAR (CalendarView) ← Visão temporal
+📊 TABLE (TabulatorView) ← Visão analítica
+🏥 PLANOS (PlanosView) ← Visão administrativa
+
+Cada visão resolve um problema diferente:
+- Dashboard: "Quantas consultas tivemos?"
+- Calendário: "O que temos para hoje?"
+- Tabela: "Qual o CPF do paciente X?"
+- Convênios: "Quais planos aceitamos?"
+```
+
+### 🆕 **Filtro Global OR**
+
+```typescript
+// TabulatorView.tsx — Busca em múltiplos campos ao mesmo tempo
+if (buscaGlobal && buscaGlobal.trim() !== "") {
+  tableRef.current.setFilter([
+    [
+      { field: "paciente", type: "like", value: buscaGlobal },
+      { field: "cpf", type: "like", value: buscaGlobal },
+      { field: "medico", type: "like", value: buscaGlobal }
+    ]
+  ]);
+}
+// Digitar "Roberto" → encontra pacientes OU médicos chamados Roberto!
+```
+
+### 🎯 **Decisões Anteriores (mantidas)**
+
+| Decisão | Justificativa |
+|---------|---------------|
+| 🐳 Docker Compose | Ambiente idêntico, zero config |
+| 🌶️ Flask | Equilíbrio simplicidade/poder |
+| ⚛️ Next.js App Router | Server Components + Roteamento moderno |
+| 📊 Tabulator | Filtro nativo + performance para datasets |
+| 🗄️ SQLite | Perfeito para MVP (migração trivial para PostgreSQL) |
+
+---
+
+## 🧰 **Comandos Úteis**
+
+```bash
+# ─────────────────────────────────────────────────────────────────────
+# 🐳 DOCKER
+# ─────────────────────────────────────────────────────────────────────
+docker compose up -d --build     # Build + Start
+docker compose down              # Parar
+docker compose logs -f           # Logs
+docker compose ps                # Status
+
+# ─────────────────────────────────────────────────────────────────────
+# 🔧 BACKEND
+# ─────────────────────────────────────────────────────────────────────
+docker exec -it timesaver_backend sh
+  python scripts/seed.py              # Seed do banco
+  python -m pytest tests/ -v          # Testes
+
+# ─────────────────────────────────────────────────────────────────────
+# 💾 BANCO
+docker exec -it timesaver_backend sqlite3 /app/agenda.db
+  .tables
+  SELECT * FROM users;
+  .exit
+
+docker compose down -v                # Reset completo
+```
+
+---
+
+<div align="center">
+
+<br>
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   🏥  Obrigado por conferir o SauTech!                       ║
+║                                                               ║
+║   🚀  v2 — Componentizado, 4 telas, backend turbinado!       ║
+║                                                               ║
+║   📋  "Tecnologia que simplifica a gestão da sua clínica."    ║
+║                                                               ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+<br>
+
+[![Feito com Docker](https://img.shields.io/badge/Feito_com-Docker-2496ED?style=flat-square&logo=docker)](https://docker.com)
+[![Feito com Flask](https://img.shields.io/badge/Feito_com-Flask-000000?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
+[![Feito com Next.js](https://img.shields.io/badge/Feito_com-Next.js-000000?style=flat-square&logo=next.js)](https://nextjs.org)
+[![Feito com TypeScript](https://img.shields.io/badge/Feito_com-TypeScript-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+
+<br>
+
+**⭐ Se este projeto te ajudou, dá uma estrela no GitHub!**
+
+<br>
+</div><div align="center">
+
+<br>
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║    ███████  █████  ██    ██ ████████ ███████  ██████  ██   ██ ║
+║    ██      ██   ██ ██    ██    ██    ██      ██    ██ ██   ██ ║
+║    ███████ ███████ ██    ██    ██    █████   ██    ██ ███████ ║
+║         ██ ██   ██ ██    ██    ██    ██      ██    ██ ██   ██ ║
+║    ███████ ██   ██  ██████     ██    ███████  ██████  ██   ██ ║
+║                                                               ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+<br>
+
 # 🏥 **SauTech — Agenda Médica Inteligente**
 
 [![Stack](https://img.shields.io/badge/Stack-Docker%20%7C%20Flask%20%7C%20Next.js%20%7C%20TypeScript-0FA0EE?style=for-the-badge)](https://github.com)

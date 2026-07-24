@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, login_required
+from .models import Convenio # Não esqueça de importar!
+from . import db
 
 main = Blueprint('main', __name__)
 
@@ -38,3 +40,31 @@ def api_get_agendamentos():
             "message": "Erro interno no servidor ao buscar dados.",
             "data": []
         }), 500
+
+@main.route('/api/convenios', methods=['GET'])
+def get_convenios():
+    convenios_db = Convenio.query.all()
+    return jsonify({
+        "status": "success",
+        "data": [c.to_dict() for c in convenios_db]
+    }), 200
+
+@main.route('/api/convenios', methods=['POST'])
+def add_convenio():
+    data = request.get_json()
+    
+    novo_convenio = Convenio(
+        nome=data.get('nome'),
+        cobertura=data.get('cobertura'),
+        status=data.get('status', 'Ativo'),
+        pacientes=0 # Todo convênio novo começa com 0 pacientes
+    )
+    
+    db.session.add(novo_convenio)
+    db.session.commit()
+    
+    return jsonify({
+        "status": "success",
+        "message": "Convênio criado com sucesso!",
+        "data": novo_convenio.to_dict()
+    }), 201

@@ -40,3 +40,21 @@ class Agendamento(db.Model):
             "convenio": self.convenio,
             "status": self.status
         }
+
+class Convenio(db.Model):
+    __tablename__ = 'convenios'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    cobertura = db.Column(db.String(100), nullable=False)
+    pacientes = db.Column(db.Integer, default=0)
+    status = db.Column(db.String(50), nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "cobertura": self.cobertura,
+            "pacientes": self.pacientes,
+            "status": self.status
+        }

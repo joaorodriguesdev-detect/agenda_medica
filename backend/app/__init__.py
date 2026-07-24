@@ -11,11 +11,16 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Habilitamos o CORS permitindo envio de cookies/credenciais entre o Next.js e o Flask
-    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
+    
+    CORS(app, supports_credentials=True)
 
     db.init_app(app)
     login_manager.init_app(app)
+
+    
+    with app.app_context():
+        from . import models 
+        db.create_all()
 
     from .routes import main as main_blueprint
     app.register_blueprint(main_blueprint)

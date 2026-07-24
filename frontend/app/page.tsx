@@ -5,6 +5,9 @@ import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import Sidebar from "./components/Sidebar";
 import CalendarView from "./components/CalendarView";
 import TabulatorView from "./components/TabulatorView";
+import PlanosView from "./components/PlanosView";
+import DashboardView from "./components/DashboardView"; 
+import SettingsView from "./components/SettingsView";
 import "react-tabulator/lib/styles.css";
 import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap.min.css";
 
@@ -41,11 +44,8 @@ export default function Home() {
     carregarAgendamentos();
   }, [router]);
 
-  // Função nova para receber os dados do modal e atualizar a tabela
   const adicionarAgendamento = (novoAgendamento: any) => {
-    // Adiciona o novo no topo da lista
     setAgendamentos(prev => [novoAgendamento, ...prev]);
-    // Muda a visão para a tabela para o usuário ver a mágica acontecer
     setVisao("tabela"); 
   };
 
@@ -62,11 +62,11 @@ export default function Home() {
         .tabulator-row .tabulator-cell { font-size: 13.5px; padding: 10px 8px; }
       `}</style>
 
-      {/* Passando a função nova para a Sidebar */}
-      <Sidebar setBuscaGlobal={setBuscaGlobal} adicionarAgendamento={adicionarAgendamento} />
+      {/* Passamos o setVisao para a Sidebar poder mudar de tela */}
+      <Sidebar setBuscaGlobal={setBuscaGlobal} adicionarAgendamento={adicionarAgendamento} setVisao={setVisao} />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        <header className="h-[76px] bg-white border-b border-[#E7E9EC] flex items-center justify-between px-8 z-10">
+      <header className="h-auto min-h-[76px] py-4 bg-white border-b border-[#E7E9EC] flex flex-col md:flex-row items-center justify-between px-4 md:px-8 z-10 gap-4">
           <div className="flex bg-[#F1F2F4] p-1 rounded-lg border border-[#E7E9EC]">
             <button onClick={() => setVisao('calendario')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'calendario' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Visualização de Calendário</button>
             <button onClick={() => setVisao('tabela')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'tabela' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Lista Tabulator (Oficial)</button>
@@ -76,11 +76,11 @@ export default function Home() {
         </header>
 
         <main className="flex-1 overflow-auto bg-[#F6F7F9]">
-        {visao === 'calendario' ? (
-            <CalendarView agendamentos={agendamentos} />
-          ) : (
-            <TabulatorView agendamentos={agendamentos} carregando={carregando} erroApi={erroApi} buscaGlobal={buscaGlobal} />
-          )}
+          {visao === 'calendario' && <CalendarView agendamentos={agendamentos} />}
+          {visao === 'tabela' && <TabulatorView agendamentos={agendamentos} carregando={carregando} erroApi={erroApi} buscaGlobal={buscaGlobal} />}
+          {visao === 'planos' && <PlanosView />}
+          {visao === 'dashboard' && <DashboardView agendamentos={agendamentos} />} 
+          {visao === 'settings' && <SettingsView />}
         </main>
       </div>
     </div>
