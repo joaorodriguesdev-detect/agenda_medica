@@ -16,5 +16,27 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def __repr__(self):
-        return f'<User {self.username}>'
+class Agendamento(db.Model):
+    __tablename__ = 'agendamentos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    paciente = db.Column(db.String(100), nullable=False)
+    cpf = db.Column(db.String(14), nullable=False)
+    medico = db.Column(db.String(100), nullable=False)
+    especialidade = db.Column(db.String(100), nullable=False)
+    data = db.Column(db.String(10), nullable=False)
+    horario = db.Column(db.String(5), nullable=False)
+    convenio = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+
+    def to_dict(self):
+        return {
+            "paciente": self.paciente,
+            "cpf": self.cpf,
+            "medico": self.medico,
+            "especialidade": self.especialidade,
+            "data": self.data,
+            "horario": self.horario,
+            "convenio": self.convenio,
+            "status": self.status
+        }

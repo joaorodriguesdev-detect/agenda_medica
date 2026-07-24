@@ -2,6 +2,971 @@
 
 <br>
 
+```
+╔══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║    ███████  █████  ██    ██ ████████ ███████  ██████  ██   ██ ║
+║    ██      ██   ██ ██    ██    ██    ██      ██    ██ ██   ██ ║
+║    ███████ ███████ ██    ██    ██    █████   ██    ██ ███████ ║
+║         ██ ██   ██ ██    ██    ██    ██      ██    ██ ██   ██ ║
+║    ███████ ██   ██  ██████     ██    ███████  ██████  ██   ██ ║
+║                                                               ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+<br>
+
+# 🏥 **SauTech — Agenda Médica Inteligente**
+
+[![Stack](https://img.shields.io/badge/Stack-Docker%20%7C%20Flask%20%7C%20Next.js%20%7C%20TypeScript-0FA0EE?style=for-the-badge)](https://github.com)
+[![Frontend](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019%20%7C%20Tailwind%204-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Backend](https://img.shields.io/badge/Backend-Flask%203.0%20%7C%20SQLAlchemy%20%7C%20SQLite-16324F?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com)
+[![Infra](https://img.shields.io/badge/Infra-Docker%20Compose%20%7C%20Multi--Service-2496ED?style=for-the-badge&logo=docker)](https://docker.com)
+
+### ✨ *Tecnologia que simplifica a gestão da sua clínica.* ✨
+
+<br>
+</div>
+
+---
+
+## 📋 **Sumário**
+
+- [🎯 Visão Geral](#-visão-geral)
+- [🏗️ Arquitetura do Projeto](#️-arquitetura-do-projeto)
+- [🛠️ Stack Tecnológica](#️-stack-tecnológica)
+- [📁 Estrutura de Diretórios](#-estrutura-de-diretórios)
+- [🐳 Docker — Orquestração Completa](#-docker--orquestração-completa)
+- [⚙️ Backend — Flask (API REST)](#️-backend--flask-api-rest)
+- [🎨 Frontend — Next.js + TypeScript](#-frontend--nextjs--typescript)
+- [🖥️ Dashboard Interativo — O Coração do Sistema](#️-dashboard-interativo--o-coração-do-sistema)
+- [📅 Calendário Visual vs. Tabela Tabulator](#-calendário-visual-vs-tabela-tabulator)
+- [🧭 Navegação por Sidebar](#-navegação-por-sidebar)
+- [🔐 Autenticação & Sessão](#-autenticação--sessão)
+- [🧪 Testes Automatizados](#-testes-automatizados)
+- [🌱 Seed de Dados](#-seed-de-dados)
+- [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
+- [📸 Demonstração Visual](#-demonstração-visual)
+- [💡 Tomada de Decisões Técnicas](#-tomada-de-decisões-técnicas)
+- [🧰 Comandos Úteis](#-comandos-úteis)
+- [📄 Licença](#-licença)
+
+---
+
+## 🎯 **Visão Geral**
+
+O **SauTech** é uma aplicação web full-stack para **gestão de agendas médicas**, combinando uma experiência de usuário premium com arquitetura enterprise moderna.
+
+### ✨ **O que fazemos**
+
+- ✅ **Dashboard duplo** — alternância entre **Calendário Visual** (cards coloridos) e **Tabela Interativa Tabulator** (dados estruturados)
+- ✅ **Sidebar inteligente** com menu de navegação, mini calendário e "Novo Agendamento"
+- ✅ **Filtros em tempo real** por paciente, CPF e médico
+- ✅ **Autenticação segura** com sessões gerenciadas por cookies (Flask-Login)
+- ✅ **Tolerância a falhas** — tratamento robusto de erros de API em 3 camadas
+- ✅ **Containerização completa** com Docker para deploy simplificado
+- ✅ **Design system próprio** com paleta azul `#0FA0EE` + tons neutros
+
+> 🔑 **Login de demonstração:** `admin@timesaver.com` | Senha: `123456`
+
+---
+
+## 🏗️ **Arquitetura do Projeto**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        🌐 ARQUITETURA GERAL                              │
+│                                                                          │
+│    ┌─────────────────────────────────────────────────────────────┐      │
+│    │                    DOCKER COMPOSE                             │      │
+│    │  ┌────────────────────────┐      ┌────────────────────────┐  │      │
+│    │  │                        │      │                        │  │      │
+│    │  │   🐍 Flask Backend     │◄────►│   ⚛️  Next.js Frontend │  │      │
+│    │  │   Container:           │      │   Container:           │  │      │
+│    │  │   timesaver_backend    │      │   timesaver_frontend   │  │      │
+│    │  │                        │      │                        │  │      │
+│    │  │   Porta :5000 (API)    │      │   Porta :3000 (SSR)    │  │      │
+│    │  │                        │      │                        │  │      │
+│    │  └──────────┬─────────────┘      └───────────┬────────────┘  │      │
+│    │             │                                │                │      │
+│    │             ▼                                ▼                │      │
+│    │    ┌───────────────┐              ┌────────────────────┐      │      │
+│    │    │   SQLite DB    │              │  Navegador (UX)    │      │      │
+│    │    │  (agenda.db)   │              │  ┌──────────────┐  │      │      │
+│    │    └───────────────┘              │  │ 🗺️ Sidebar   │  │      │      │
+│    │                                  │  │ 📅 Calendário │  │      │      │
+│    │                                  │  │ 📊 Tabulator  │  │      │      │
+│    │                                  │  └──────────────┘  │      │      │
+│    └────────────────────────────────────────────────────────┘      │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### 🔄 **Fluxo de Dados**
+
+```
+┌──────────┐     HTTP/JSON      ┌──────────┐     SQLAlchemy     ┌──────────┐
+│          │   ◄────────────►   │          │   ◄────────────►   │          │
+│   Next   │   credentials:     │  Flask   │                    │  SQLite   │
+│   (UI)   │     "include"      │  (API)   │                    │   (DB)    │
+│          │                    │          │                    │          │
+└──────────┘                    └────┬─────┘                    └──────────┘
+                                     │
+                                     │ requests.get(timeout=5)
+                                     ▼
+                            ┌────────────────┐
+                            │   Mock API     │
+                            │ (endpoint      │
+                            │  interno)      │
+                            └────────────────┘
+```
+
+---
+
+## 🛠️ **Stack Tecnológica**
+
+### 🐳 **Infraestrutura & Deploy**
+
+```
+📦 Docker
+├── 🐳 Docker Compose (Orquestração multi-container)
+│   ├── 🏗️ Dockerfile (Backend — Python 3.11-slim)
+│   └── 🏗️ Dockerfile (Frontend — Node 20-alpine)
+```
+
+### ⚙️ **Backend**
+
+```
+🐍 Python 3.11
+├── 🌶️ Flask 3.0.3 (Micro-framework web)
+├── 🗄️ Flask-SQLAlchemy 3.1.1 (ORM)
+├── 🔐 Flask-Login 0.6.3 (Gerenciamento de sessão)
+├── 🔗 Flask-Cors 4.0.0 (Cross-Origin Resource Sharing)
+├── 🔑 Werkzeug 3.0.3 (Password hashing com pbkdf2:sha256)
+├── 🌐 Requests 2.32.3 (HTTP client para API externa)
+└── 🧪 Pytest 8.2.2 (Testes automatizados)
+```
+
+### 🎨 **Frontend**
+
+```
+⚛️ Next.js 16.2.11 (React framework — App Router)
+├── 🟦 TypeScript 5.x (Tipagem estática — strict mode)
+├── 🎭 React 19.2.4 (UI library)
+├── 🎨 Tailwind CSS 4 (Utility-first CSS — engine @tailwindcss/postcss)
+├── 📊 React-Tabulator 0.21.0 (Tabela interativa profissional)
+├── 🔤 Geist Font (Tipografia padrão — otimizada via next/font)
+├── 🔤 Space Grotesk (Display — títulos e branding)
+├── 🔤 Inter (Body — texto corrido e labels)
+└── 🔤 IBM Plex Mono (Dados tabulares — CPF, datas, horários)
+```
+
+### 🎨 **Design System — Paleta de Cores**
+
+```
+🎯 Paleta SauTech
+──────────────────────────────────────────────
+🔵 #0FA0EE  — Azul primário (ações, sidebar, destaque)
+🔵 #16324F  — Azul petróleo (login panel, headers de tabela)
+🟡 #C9992F  — Dourado (marca, glow, eixos do relógio)
+⚪ #F6F7F9  — Background principal
+⚪ #FFFFFF  — Cards, sidebar, tabela
+⚫ #1C2530  — Texto principal
+🔘 #5B6472  — Texto secundário
+🔘 #8A93A0  — Placeholder, ícones inativos
+──────────────────────────────────────────────
+
+🟢 #2E9E6D  — Confirmado
+🟡 #C9992F  — Pendente
+🔴 #C0463C  — Cancelado
+🔵 #3B6EA5  — Concluído
+```
+
+---
+
+## 📁 **Estrutura de Diretórios**
+
+```
+📦 sautech/
+├── 🐳 docker-compose.yml           # Orquestração dos containers
+│
+├── 🐍 backend/                      # API Flask
+│   ├── 🏗️ Dockerfile               # Imagem Docker do backend
+│   ├── 📄 requirements.txt          # Dependências Python
+│   ├── ▶️ run.py                    # Ponto de entrada da aplicação
+│   ├── 🗄️ agenda.db                # Banco SQLite (gerado)
+│   │
+│   ├── 📁 app/                      # Pacote principal
+│   │   ├── __init__.py             # Factory pattern (create_app)
+│   │   ├── config.py               # Configurações (SECRET_KEY, DB, API)
+│   │   ├── models.py               # Modelo User (ORM)
+│   │   ├── routes.py               # Blueprint de rotas (login, agenda)
+│   │   └── services.py             # Lógica de negócio (fetch_agendamentos)
+│   │
+│   ├── 📁 scripts/                  # Utilitários
+│   │   └── seed.py                 # Popula banco com dados iniciais
+│   │
+│   ├── 📁 tests/                    # Suíte de testes
+│   │   ├── test_auth.py            # Testes de autenticação
+│   │   └── test_agenda.py          # Testes de consumo de API
+│   │
+│   └── 📄 .env                      # Variáveis de ambiente
+│
+└── ⚛️ frontend/                     # Next.js Application
+    ├── 🏗️ Dockerfile               # Imagem Docker do frontend
+    ├── 📄 package.json              # Dependências npm
+    ├── 📄 next.config.ts            # Configuração Next.js
+    ├── 📄 tsconfig.json             # Configuração TypeScript (strict)
+    ├── 📄 postcss.config.mjs        # PostCSS + Tailwind v4
+    ├── 📄 eslint.config.mjs         # ESLint + Next.js core-web-vitals
+    │
+    ├── 📁 app/                      # App Router (Next.js 16)
+    │   ├── globals.css             # Estilos globais + Tailwind
+    │   ├── layout.tsx              # Root layout (fonts, metadata)
+    │   ├── page.tsx                # 🆕 Dashboard (sidebar + calendário + tabela)
+    │   │
+    │   └── 📁 login/               # Rota /login
+    │       └── page.tsx            # Tela de login rebranded
+    │
+    └── 📁 public/                   # Assets estáticos
+```
+
+---
+
+## 🐳 **Docker — Orquestração Completa**
+
+### 📄 `docker-compose.yml`
+
+```yaml
+services:
+  backend:
+    build: ./backend
+    container_name: timesaver_backend
+    ports: ["5000:5000"]
+    env_file: ./backend/.env
+    volumes:
+      - ./backend:/app          # Hot-reload em desenvolvimento
+    restart: unless-stopped     # Auto-healing
+
+  frontend:
+    build: ./frontend
+    container_name: timesaver_frontend
+    ports: ["3000:3000"]
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    depends_on:
+      - backend
+```
+
+### 🏗️ **Dockerfile — Backend (Python 3.11-slim)**
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1     # Sem .pyc
+ENV PYTHONUNBUFFERED=1            # Logs em tempo real
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+EXPOSE 5000
+CMD ["python", "run.py"]
+```
+
+### 🏗️ **Dockerfile — Frontend (Node 20-alpine)**
+
+```dockerfile
+FROM node:20-alpine
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
+```
+
+---
+
+## ⚙️ **Backend — Flask (API REST)**
+
+> *(Backend permanece inalterado — mesmo código robusto de antes!)*
+
+### 🧠 **Application Factory Pattern**
+
+```python
+# app/__init__.py
+db = SQLAlchemy()
+login_manager = LoginManager()
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
+    db.init_app(app)
+    login_manager.init_app(app)
+    from .routes import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+    return app
+```
+
+### 🗄️ **Modelo User — Segurança por Design**
+
+```python
+# app/models.py
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    
+    id            = db.Column(db.Integer, primary_key=True)
+    username      = db.Column(db.String(64), unique=True, nullable=False)
+    email         = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)  # pbkdf2:sha256
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+```
+
+### 🛣️ **Rotas da API**
+
+| Método | Rota                    | Descrição                            | Auth |
+|--------|------------------------|--------------------------------------|:----:|
+| POST   | `/api/login`           | Autenticação (e-mail OU username)    |  ❌  |
+| POST   | `/api/logout`          | Encerramento de sessão               |  ✅  |
+| GET    | `/api/agendamentos`    | Lista de agendamentos com fallback   |  ❌* |
+| GET    | `/api/mock/agendamentos` | Mock interno para testes           |  ❌  |
+
+### 🛡️ **Services — Tolerância a Falhas em 3 Camadas**
+
+```python
+# app/services.py
+def fetch_agendamentos():
+    try:
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        
+        # 🛡️ Camada 1: Resposta vazia ou formato inválido
+        if not data or 'agendamentos' not in data:
+            return {"status": "error", "message": "...", "data": []}
+        
+        # 🛡️ Camada 2: Validação de campos obrigatórios
+        valid = [ag for ag in data['agendamentos'] 
+                if all(f in ag and ag[f] for f in required_fields)]
+        
+        return {"status": "success", "data": valid}
+        
+    except ConnectionError:
+        # 🛡️ Camada 3: API indisponível
+        return {"status": "error", "message": "API temporariamente indisponível"}
+    except ValueError:
+        return {"status": "error", "message": "Erro de parse JSON"}
+```
+
+---
+
+## 🎨 **Frontend — Next.js + TypeScript**
+
+### 🚀 **Next.js 16 App Router**
+
+```typescript
+// frontend/app/layout.tsx
+
+export const metadata: Metadata = {
+  title: "Sautech Agendamento",
+  description: "Joao Detect",
+};
+
+// Fontes otimizadas com next/font (Google Fonts → arquivos estáticos)
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+```
+
+### 📐 **Sistema Tipográfico**
+
+```typescript
+// page.tsx — Hierarquia de 3 níveis
+const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"] });
+const body    = Inter({ subsets: ["latin"], weight: ["400", "500", "600"] });
+const mono    = IBM_Plex_Mono({ subsets: ["latin"], weight: ["500"] });
+
+// Uso:
+// 🏷️ Títulos → Space Grotesk (personalidade)
+// 📝 Textos → Inter (legibilidade)
+// 🔢 Dados  → IBM Plex Mono (alinhamento tabular)
+```
+
+---
+
+## 🖥️ **Dashboard Interativo — O Coração do Sistema**
+
+O dashboard foi totalmente refatorado para uma experiência **tipo SaaS profissional**, com layout de aplicação desktop.
+
+### 🧭 **Layout Geral**
+
+```
+┌──────┬────────────┬──────────────────────────────────────────────────┐
+│      │            │  ┌──────────────────────────────────────────┐   │
+│  🔵  │   BUSCAR   │  │  [📅 Calendário]  [📊 Lista Tabulator]   │   │
+│  70px │  + NOVO    │  └──────────────────────────────────────────┘   │
+│      │  AGENDA.   │  ┌──────────────────────────────────────────┐   │
+│  🗺️  │            │  │                                          │   │
+│  Íco- │  📅 Mini  │  │     ÁREA PRINCIPAL (flex-1)              │   │
+│  nes  │  Calend.  │  │                                          │   │
+│      │            │  │   Alterna entre:                          │   │
+│      │  Set/2026  │  │   • 📅 Calendário Visual (cards)          │   │
+│      │            │  │   • 📊 Tabela Tabulator (dados)           │   │
+│      │            │  │                                          │   │
+│      │  🏥       │  │                                          │   │
+│      │  SauTech  │  │                                          │   │
+├──────┴────────────┴──────────────────────────────────────────────────┤
+│                                                                      │
+│  🔵 Sidebar Primário (70px) │ ⚪ Sidebar Secundário (280px) │ 📋 Main│
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### 🗺️ **Sidebar Primária (70px) — Navegação Principal**
+
+```
+┌────────────┐
+│   ≡ Menu   │  ← Abre/fecha navegação
+│            │
+│  📅 Cal.   │  ← Agenda
+│  ❤️        │  ← Favoritos
+│  📊        │  ← Relatórios
+│  ⚙️        │  ← Configurações
+│            │
+│     TS     │  ← Avatar do usuário
+└────────────┘
+
+Cor: #0FA0EE (azul SauTech)
+```
+
+### ⚪ **Sidebar Secundária (280px) — Ações Contextuais**
+
+```
+┌────────────────────────────────┐
+│  ┌──────────────────────────┐  │
+│  │  ＋ Novo Agendamento    │  │  ← CTA principal
+│  └──────────────────────────┘  │
+│                                │
+│  🔍 Buscar consultas...       │  ← Filtro global
+│                                │
+│  📅 SETEMBRO      2026        │
+│  D  S  T  Q  Q  S  S          │
+│        1  2  3  4  5          │  ← Mini calendário
+│  6  7  8  🔵10 11 12          │
+│  13 14 15 16 17 18 19         │
+│                                │
+│  🏥 SauTech                   │  ← Branding
+│  AGENDAMENTOS                 │
+└────────────────────────────────┘
+```
+
+### 💡 **Sistema de Ícones SVG — Zero Dependências**
+
+```typescript
+// Todos os ícones são SVGs inline — sem bibliotecas externas!
+const Icons = {
+  Menu: () => <svg>...</svg>,
+  Calendar: () => <svg>...</svg>,
+  Heart: () => <svg>...</svg>,
+  Chart: () => <svg>...</svg>,
+  Settings: () => <svg>...</svg>,
+  Search: () => <svg>...</svg>,
+  Plus: () => <svg>...</svg>,
+};
+
+// ✅ Bundle menor (sem react-icons, heroicons, etc)
+// ✅ Controle total sobre tamanho, cor, stroke
+// ✅ Performance — sem runtime overhead
+```
+
+---
+
+## 📅 **Calendário Visual vs. Tabela Tabulator**
+
+O grande diferencial do SauTech é o **toggle entre duas visões**:
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  [📅 Visualização de Calendário]  [📊 Lista Tabulator (Oficial)]    │
+│                                    ▲                                 │
+│                    Botão toggle no header (bg-[#F1F2F4])            │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### 📅 **Visão Calendário**
+
+```
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│     28       │     29       │     30       │     31       │
+│              │              │              │              │
+│  ┌────────┐  │  ┌────────┐  │              │              │
+│  │10:00   │  │  │08:00   │  │              │              │
+│  │Carlos  │  │  │Ana     │  │  ┌────────┐  │              │
+│  │Andrade │  │  │Souza   │  │  │15:00   │  │              │
+│  │Ortopedia│  │  │Dermato │  │  │Roberto │  │              │
+│  └────────┘  │  └────────┘  │  │Alves   │  │              │
+│              │              │  │Clínico │  │              │
+│  ┌────────┐  │  ┌────────┐  │  └────────┘  │              │
+│  │14:30   │  │  │11:00   │  │              │              │
+│  │Mariana │  │  │Felipe  │  │              │              │
+│  │Costa   │  │  │Mendes  │  │              │              │
+│  │Cardio  │  │  │Cancel. │  │              │              │
+│  └────────┘  │  └────────┘  │              │              │
+└──────────────┴──────────────┴──────────────┴──────────────┘
+```
+
+**Cards coloridos por tipo:**
+- 🔵 `#359CFB` — Consultas normais
+- 🟡 `#FCB80F` — Consultas pendentes
+- 🔴 `#FF7E78` — Cancelados (com badge "Cancelado")
+- 🟣 `#7C8CD6` — Outras especialidades
+
+### 📊 **Visão Tabela (Tabulator)**
+
+```
+┌───────┬────────┬─────────────┬──────────────┬──────────┬─────────┐
+│  DATA │ HORÁRI │  PACIENTE   │     CPF      │  MÉDICO  │ STATUS  │
+├───────┼────────┼─────────────┼──────────────┼──────────┼─────────┤
+│ 07-24 │ 10:00  │ Carlos A.   │111.111.111-11│ Dr. Rob. │ 🟢 Conf. │
+│ 07-24 │ 14:30  │ Mariana C.  │222.222.222-22│ Dra. Sil │ 🟡 Pend. │
+│ 07-25 │ 09:00  │ Felipe M.   │333.333.333-33│ Dr. Rob. │ 🔴 Canc. │
+└───────┴────────┴─────────────┴──────────────┴──────────┴─────────┘
+
+🔍 Filtros: [Paciente] [CPF] [Médico]
+```
+
+**Sistema de Status com Cores Semânticas:**
+
+```typescript
+const STATUS_STYLES = {
+  confirmado: { bg: "#EAF6EF", fg: "#1E7A50", dot: "#2E9E6D" },
+  pendente:   { bg: "#FBF2E3", fg: "#8A6412", dot: "#C9992F" },
+  cancelado:  { bg: "#FBECEA", fg: "#A23B2F", dot: "#C0463C" },
+  concluido:  { bg: "#EAF0F8", fg: "#234875", dot: "#3B6EA5" },
+};
+```
+
+---
+
+## 🔐 **Autenticação & Sessão**
+
+### Tela de Login — Rebranded para SauTech
+
+```
+┌──────────────────────────────────────────────────────┐
+│  ┌─────────────────────┐  ┌────────────────────────┐  │
+│  │   ⏱️ Sautech        │  │  BEM-VINDO DE VOLTA    │  │
+│  │                     │  │                        │  │
+│  │   "Cada minuto da   │  │  👤 Usuário ou e-mail  │  │
+│  │    sua agenda, no   │  │  🔒 Senha              │  │
+│  │    lugar certo."    │  │  👁️ Mostrar/ocultar    │  │
+│  │                     │  │                        │  │
+│  │   Fundo azul com    │  │  [      Entrar      ] │  │
+│  │   grid pattern      │  │                        │  │
+│  │   + clock animado   │  │  © SauTech             │  │
+│  └─────────────────────┘  └────────────────────────┘  │
+└──────────────────────────────────────────────────────┘
+```
+
+**Características de UX:**
+
+- 🎬 **Animação CSS** nos ponteiros do relógio (marca registrada)
+- ✨ **Glow pulsante** no painel de marca
+- 👁️ **Toggle de visibilidade** da senha
+- ⏳ **Spinner de carregamento** no botão durante login
+- 🚨 **Mensagens de erro** estilizadas com ícone e borda
+- ♿ **`prefers-reduced-motion`** — acessibilidade como prioridade
+
+### Fluxo de Autenticação
+
+```
+Navegador                  Next.js                  Flask
+   │                          │                       │
+   │   [Usuário digita]       │                       │
+   ├──► POST /api/login ─────►│──── JSON ────────────►│
+   │   credentials:include    │                       │
+   │                          │                       │  Verifica
+   │                          │                       │  credenciais
+   │                          │                       │
+   │◄─── Set-Cookie ──────────│◄─── 200 OK ──────────┤
+   │                          │                       │
+   │   [Redireciona /]        │                       │
+   ├──► GET / ───────────────►│                       │
+   │                          │                       │
+   │                          ├──► GET /api/agendamentos ──────────►│
+   │                          │    credentials:include │              │
+   │                          │◄─── JSON agendamentos ◄──────────────┤
+   │                          │                       │
+   │◄─── Dashboard renderizado┤                       │
+   │    (sidebar + calendário)│                       │
+```
+
+---
+
+## 🧪 **Testes Automatizados**
+
+### 📋 Suíte de Testes
+
+```
+📁 tests/
+├── test_auth.py
+│   ├── test_login_valido()     → ✅ 200 + b'Sair' no response
+│   └── test_login_invalido()   → ✅ Mensagem de erro
+│
+└── test_agenda.py
+    └── test_falha_api_agendamentos()
+        → ✅ status == 'error'
+        → ✅ data == []
+        → ✅ 'temporariamente indisponível' na mensagem
+```
+
+### 🔧 **Banco em Memória**
+
+```python
+@pytest.fixture
+def client():
+    app = create_app()
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # 🚀 Relâmpago!
+    
+    with app.test_client() as client:
+        with app.app_context():
+            db.create_all()
+            user = User(username='admin_teste', email='teste@admin.com')
+            user.set_password('senha123')
+            db.session.add(user)
+            db.session.commit()
+        yield client
+        # Cleanup automático
+        with app.app_context():
+            db.session.remove()
+            db.drop_all()
+```
+
+---
+
+## 🌱 **Seed de Dados**
+
+```bash
+$ docker exec -it timesaver_backend python scripts/seed.py
+
+# ✅ Tabelas criadas no SQLite
+# ✅ Usuário admin: admin@timesaver.com / 123456
+# ✅ API Mock com 4 agendamentos (incluindo 1 inválido para testar filtro)
+```
+
+### 📦 **Dados Mockados**
+
+```json
+{
+  "agendamentos": [
+    {"paciente": "Carlos Andrade",  "cpf": "111.111.111-11", "medico": "Dr. Roberto",   "especialidade": "Ortopedia",    "data": "2026-07-24", "horario": "10:00", "convenio": "Unimed",  "status": "Confirmado"},
+    {"paciente": "Mariana Costa",  "cpf": "222.222.222-22", "medico": "Dra. Silvia",   "especialidade": "Cardiologia",  "data": "2026-07-24", "horario": "14:30", "convenio": "Bradesco", "status": "Pendente"},
+    {"paciente": "Felipe Mendes",  "cpf": "333.333.333-33", "medico": "Dr. Roberto",   "especialidade": "Ortopedia",    "data": "2026-07-25", "horario": "09:00", "convenio": "Particular", "status": "Cancelado"},
+    {"paciente": "Registro Incompleto", "cpf": "000.000.000-00", "medico": "Dr. Fantasma"}  // ← Inválido (filtrado!)
+  ]
+}
+```
+
+---
+
+## 🚀 **Como Executar o Projeto**
+
+### 📋 **Pré-requisitos**
+
+| Ferramenta       | Versão | Verificação          |
+|------------------|:------:|----------------------|
+| 🐳 Docker       | 24+    | `docker --version`   |
+| 🐳 Compose      | 2.0+   | `docker compose version` |
+
+### 🚀 **Passo a Passo**
+
+```bash
+# 1️⃣ Clone
+git clone https://github.com/seu-usuario/sautech.git
+cd sautech
+
+# 2️⃣ Construa e inicie
+docker compose up -d --build
+
+# 3️⃣ Popule o banco
+docker exec -it timesaver_backend python scripts/seed.py
+
+# 4️⃣ Acesse
+open http://localhost:3000
+
+# 5️⃣ Login
+#    📧 admin@timesaver.com
+#    🔑 123456
+```
+
+### 🛑 **Gerenciamento**
+
+```bash
+# Logs em tempo real
+docker compose logs -f
+
+# Parar
+docker compose down
+
+# Reset total
+docker compose down -v
+docker compose up -d
+docker exec -it timesaver_backend python scripts/seed.py
+
+# Testes
+docker exec -it timesaver_backend python -m pytest tests/ -v
+```
+
+---
+
+## 📸 **Demonstração Visual**
+
+### 🚪 **Tela de Login**
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  ┌──────────────────────────┐  ┌──────────────────────────────────┐  │
+│  │   ⏱️ Sautech            │  │  BEM-VINDO DE VOLTA              │  │
+│  │                          │  │  ─────────────────────────────   │  │
+│  │   ┌──────────────────┐   │  │  Entrar na sua conta             │  │
+│  │   │ ✨ Glow animado  │   │  │                                  │  │
+│  │   │    ┌─┐          │   │  │  ┌────────────────────────────┐ │  │
+│  │   │    │⏱│          │   │  │  │ 👤 Usuário ou e-mail       │ │  │
+│  │   │    └─┘          │   │  │  └────────────────────────────┘ │  │
+│  │   │  Fundo azul     │   │  │  ┌────────────────────────────┐ │  │
+│  │   └──────────────────┘   │  │  │ 🔒 Senha            👁️    │ │  │
+│  │                          │  │  └────────────────────────────┘ │  │
+│  │   "Cada minuto da       │  │                                  │  │
+│  │    sua agenda, no       │  │  ┌────────────────────────────┐ │  │
+│  │    lugar certo."        │  │  │      ⏳ Entrando...        │ │  │
+│  │                          │  │  └────────────────────────────┘ │  │
+│  └──────────────────────────┘  └──────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### 📋 **Dashboard — Visão Calendário**
+
+```
+┌────┬──────────┬──────────────────────────────────────────────────────┐
+│ 🗺️ │  ＋ NOVO │  [📅 Calendário]  [📊 Tabela]          [Sair]     │
+│    │  🔍 Bus  ├──────────────────────────────────────────────────────┤
+│  ≡  │  ────── │  ┌──────┬──────┬──────┬──────┐                      │
+│  📅 │  Set    │  │  28  │  29  │  30  │  31  │                      │
+│  ❤️ │   2026  │  ├──────┼──────┼──────┼──────┤                      │
+│  📊 │         │  │🔵10: │🟡08: │      │      │                      │
+│  ⚙️ │  🏥    │  │Carlos│Ana   │🟣15: │      │                      │
+│     │  SauTec │  │      │      │Rober │      │                      │
+│  TS │         │  │🔵14: │🔴11: │      │      │                      │
+│     │         │  │Maria │Felipe│      │      │                      │
+└────┴──────────┴──────────────────────────────────────────────────────┘
+```
+
+### 📋 **Dashboard — Visão Tabela**
+
+```
+┌────┬──────────┬──────────────────────────────────────────────────────┐
+│ 🗺️ │  ＋ NOVO │  [📅]  [📊 Tabela]                       [Sair]     │
+│    │  🔍 Bus  ├──────────────────────────────────────────────────────┤
+│  ≡  │  ────── │  🔍 Paciente  │  🔍 CPF  │  🔍 Médico              │
+│  📅 │  Set    ├──────────────────────────────────────────────────────┤
+│  ❤️ │   2026  │  ┌──────┬──────┬────────┬────────┬──────┬─────────┐ │
+│  📊 │         │  │ DATA │ HOR  │ PACIENT│ CPF    │MÉDICO│ STATUS  │ │
+│  ⚙️ │  🏥    │  ├──────┼──────┼────────┼────────┼──────┼─────────┤ │
+│     │  SauTec │  │07-24 │10:00 │Carlos  │111.111 │Dr.R. │ 🟢 Conf │ │
+│  TS │         │  │07-25 │09:00 │Felipe  │333.333 │Dr.R. │ 🔴 Canc │ │
+└────┴──────────┴──────────────────────────────────────────────────────┘
+```
+
+---
+
+## 💡 **Tomada de Decisões Técnicas**
+
+### 🆕 **Evolução do Layout — Time Saver → SauTech**
+
+```
+Antes (Time Saver)                Depois (SauTech)
+══════════════════                ═════════════════
+
+┌──────────────────┐             ┌────┬──────────┬──────────────┐
+│ ⏱️ Time Saver   │             │ 🗺️ │  ＋ NOVO │ [📅][📊]    │
+│     [Sair]      │             │  ≡  │  🔍 Bus │              │
+├──────────────────┤             │  📅 │  📅 Sep │  CALENDÁRIO  │
+│                  │             │  ❤️ │   2026  │  VISUAL      │
+│   DADOS DA      │             │  📊 │         │  ou TABELA   │
+│   TABELA        │             │  ⚙️ │  🏥     │              │
+│                  │             │     │  SauTec │              │
+└──────────────────┘             └────┴──────────┴──────────────┘
+
+❌ Layout simples                ✅ Layout SaaS profissional
+❌ Apenas tabela                 ✅ Calendário + Tabela toggle
+❌ Sem sidebar                   ✅ Sidebar dupla com navegação
+❌ Header simples                ✅ Header com abas de visão
+```
+
+### 🎯 Por que **Sidebar Dupla**?
+
+```
+┌─────────────┬──────────────┬────────────────────────────────┐
+│  Primária   │  Secundária  │  Área Principal               │
+│  (70px)     │  (280px)     │                               │
+├─────────────┼──────────────┼────────────────────────────────┤
+│ Navegação   │ Ações        │ Conteúdo                      │
+│ global      │ contextuais  │ dinâmico                      │
+│             │              │                               │
+│ Ícones      │ Busca        │ • Calendário                  │
+│ sempre      │ Mini calend. │ • Tabela Tabulator            │
+│ visíveis    │ Novo agend.  │ • (futuro: detalhes)          │
+└─────────────┴──────────────┴────────────────────────────────┘
+
+✅ Separação clara entre navegação e conteúdo
+✅ Mais espaço para a área principal
+✅ Padrão adotado por: Linear, Height, Notion
+```
+
+### 🎯 Por que **Docker Compose**?
+
+| Abordagem     | Vantagens                                     |
+|---------------|-----------------------------------------------|
+| 🐳 Docker     | ✅ Ambiente idêntico em qualquer máquina      |
+|               | ✅ Zero configuração manual                   |
+|               | ✅ Ready-to-deploy em qualquer cloud          |
+| ❌ Local      | ⚠️ "Na minha máquina funciona"               |
+
+### 🎯 Por que **Flask**?
+
+| Critério         | Flask ✅    | FastAPI    | Django     |
+|------------------|:-----------:|:----------:|:----------:|
+| ⚡ Curva aprend.  | ★★★★★      | ★★★★☆     | ★★★☆☆     |
+| 🎯 Escopo        | Microframew.| API-first  | Full-stack |
+| ⏱️ Time-to-market| ✅ Rápido   | ⚠️ Médio  | ⚠️ Lento  |
+
+### 🎯 Por que **Tabela + Calendário**?
+
+```
+📅 CALENDÁRIO                     📊 TABULATOR
+═══════════════                   ═══════════════
+✅ Visual intuitivo               ✅ Dados estruturados
+✅ Cards coloridos                ✅ Filtros por campo
+✅ Visão temporal                 ✅ Ordenação por coluna
+✅ Melhor para poucos registros   ✅ Melhor para muitos registros
+✅ Identificação rápida           ✅ Exportação facilitada
+
+💡 O toggle permite ao usuário escolher a melhor ferramenta
+    para cada tarefa — visão ampla vs. visão analítica!
+```
+
+### 🎯 Por que **SQLite**?
+
+```
+SQLite (MVP)           →    PostgreSQL (Produção)
+═══════════════              ═══════════════════
+✅ Zero config               ✅ Concorrência alta
+✅ Arquivo único             ✅ 10+ usuários simultâneos
+✅ Perfeito para MVP         ✅ Ready para escala
+
+🔄 Migração: apenas trocar DATABASE_URL no .env!
+```
+
+---
+
+## 🧰 **Comandos Úteis**
+
+```bash
+# ─────────────────────────────────────────────────────────────────────
+# 🐳 DOCKER
+# ─────────────────────────────────────────────────────────────────────
+
+docker compose up -d --build     # Build + Start
+docker compose up -d             # Start sem rebuild
+docker compose down              # Parar tudo
+docker compose logs -f           # Logs em tempo real
+docker compose ps                # Status dos containers
+
+# ─────────────────────────────────────────────────────────────────────
+# 🔧 BACKEND
+# ─────────────────────────────────────────────────────────────────────
+
+docker exec -it timesaver_backend sh
+  python scripts/seed.py              # Seed do banco
+  python -m pytest tests/ -v          # Rodar testes
+  python -m pytest tests/ -v --cov=app  # Testes com coverage
+
+# ─────────────────────────────────────────────────────────────────────
+# ⚛️  FRONTEND
+# ─────────────────────────────────────────────────────────────────────
+
+docker exec -it timesaver_frontend sh
+  npm install <pacote>                # Nova dependência
+  npm run lint                        # Lint
+
+# ─────────────────────────────────────────────────────────────────────
+# 💾 BANCO DE DADOS
+# ─────────────────────────────────────────────────────────────────────
+
+docker exec -it timesaver_backend sqlite3 /app/agenda.db
+  .tables
+  SELECT * FROM users;
+  .exit
+
+docker compose down -v                # Reset completo
+```
+
+---
+
+## 📄 **Licença**
+
+```
+MIT License
+
+Copyright (c) 2026 SauTech
+```
+
+---
+
+<div align="center">
+
+<br>
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   🏥  Obrigado por conferir o SauTech!                       ║
+║                                                               ║
+║   🚀  Desenvolvido com ☕, Docker, Python & TypeScript         ║
+║                                                               ║
+║   📋  "Tecnologia que simplifica a gestão da sua clínica."    ║
+║                                                               ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+<br>
+
+[![Feito com Docker](https://img.shields.io/badge/Feito_com-Docker-2496ED?style=flat-square&logo=docker)](https://docker.com)
+[![Feito com Flask](https://img.shields.io/badge/Feito_com-Flask-000000?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
+[![Feito com Next.js](https://img.shields.io/badge/Feito_com-Next.js-000000?style=flat-square&logo=next.js)](https://nextjs.org)
+[![Feito com TypeScript](https://img.shields.io/badge/Feito_com-TypeScript-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+
+<br>
+
+**⭐ Se este projeto te ajudou, dá uma estrela no GitHub!**
+
+<br>
+</div><div align="center">
+
+<br>
+
 https://github.com/joaorodriguesdev-detect/agenda_medica.git
 
 <br>

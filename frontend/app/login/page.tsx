@@ -123,7 +123,7 @@ export default function Login() {
         <div className="flex items-center gap-3 relative">
           <ClockMark size={30} tone="#FFFFFF" />
           <span style={{ fontFamily: "var(--font-display)" }} className="text-white font-semibold text-lg tracking-tight">
-            Time Saver
+            Sautech
           </span>
         </div>
 

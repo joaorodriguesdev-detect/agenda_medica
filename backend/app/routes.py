@@ -43,11 +43,16 @@ def api_get_agendamentos():
 
 @main.route('/api/mock/agendamentos')
 def mock_api():
+    from .models import Agendamento
+    
+    # Consulta real ao banco de dados SQLite
+    agendamentos_db = Agendamento.query.all()
+    dados_formatados = [ag.to_dict() for ag in agendamentos_db]
+    
+    # Simulação intencional de um registro com campos ausentes para avaliação de tratamento de falhas
+    dados_formatados.append({"paciente": "Registro Incompleto", "cpf": "000.000.000-00", "medico": "Dr. Fantasma"})
+    
+    # A resposta deve conter paciente, CPF, médico, especialidade, data, horário, convênio e status[cite: 1]
     return jsonify({
-        "agendamentos": [
-            {"paciente": "Carlos Andrade", "cpf": "111.111.111-11", "medico": "Dr. Roberto", "especialidade": "Ortopedia", "data": "2026-07-24", "horario": "10:00", "convenio": "Unimed", "status": "Confirmado"},
-            {"paciente": "Mariana Costa", "cpf": "222.222.222-22", "medico": "Dra. Silvia", "especialidade": "Cardiologia", "data": "2026-07-24", "horario": "14:30", "convenio": "Bradesco", "status": "Pendente"},
-            {"paciente": "Felipe Mendes", "cpf": "333.333.333-33", "medico": "Dr. Roberto", "especialidade": "Ortopedia", "data": "2026-07-25", "horario": "09:00", "convenio": "Particular", "status": "Cancelado"},
-            {"paciente": "Registro Incompleto", "cpf": "000.000.000-00", "medico": "Dr. Fantasma"} 
-        ]
+        "agendamentos": dados_formatados
     })
