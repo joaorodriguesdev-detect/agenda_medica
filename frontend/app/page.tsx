@@ -8,6 +8,9 @@ import TabulatorView from "./components/TabulatorView";
 import PlanosView from "./components/PlanosView";
 import DashboardView from "./components/DashboardView"; 
 import SettingsView from "./components/SettingsView";
+import PacientesView from "./components/PacientesView";
+import MedicosView from "./components/MedicosView";
+
 import "react-tabulator/lib/styles.css";
 import "react-tabulator/lib/css/bootstrap/tabulator_bootstrap.min.css";
 
@@ -62,18 +65,29 @@ export default function Home() {
         .tabulator-row .tabulator-cell { font-size: 13.5px; padding: 10px 8px; }
       `}</style>
 
-      {/* Passamos o setVisao para a Sidebar poder mudar de tela */}
       <Sidebar setBuscaGlobal={setBuscaGlobal} adicionarAgendamento={adicionarAgendamento} setVisao={setVisao} />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-      <header className="h-auto min-h-[76px] py-4 bg-white border-b border-[#E7E9EC] flex flex-col md:flex-row items-center justify-between px-4 md:px-8 z-10 gap-4">
-          <div className="flex bg-[#F1F2F4] p-1 rounded-lg border border-[#E7E9EC]">
-            <button onClick={() => setVisao('calendario')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'calendario' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Visualização de Calendário</button>
-            <button onClick={() => setVisao('tabela')} className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'tabela' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}>Lista Agendamentos</button>
-          </div>
-          
-          <button onClick={async () => { await fetch("http://localhost:5000/api/logout", { method: "POST" }); router.push("/login"); }} className="text-sm font-medium text-[#5B6472] hover:text-[#A23B2F] transition-colors">Encerrar Sessão</button>
-        </header>
+        
+        {/* Renderiza o cabeçalho APENAS nas abas de agenda, removendo o espaço nas demais */}
+        {(visao === 'calendario' || visao === 'tabela') && (
+          <header className="h-auto min-h-[76px] py-4 bg-white border-b border-[#E7E9EC] flex flex-col md:flex-row items-center justify-between px-4 md:px-8 z-10 gap-4">
+            <div className="flex bg-[#F1F2F4] p-1 rounded-lg border border-[#E7E9EC]">
+              <button 
+                onClick={() => setVisao('calendario')} 
+                className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'calendario' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}
+              >
+                Visualização de Calendário
+              </button>
+              <button 
+                onClick={() => setVisao('tabela')} 
+                className={`px-5 py-1.5 text-sm font-semibold rounded-md transition-all ${visao === 'tabela' ? 'bg-white shadow-sm text-[#0FA0EE]' : 'text-[#5B6472] hover:text-[#1C2530]'}`}
+              >
+                Lista Tabulator (Oficial)
+              </button>
+            </div>
+          </header>
+        )}
 
         <main className="flex-1 overflow-auto bg-[#F6F7F9]">
           {visao === 'calendario' && <CalendarView agendamentos={agendamentos} />}
@@ -81,6 +95,8 @@ export default function Home() {
           {visao === 'planos' && <PlanosView />}
           {visao === 'dashboard' && <DashboardView agendamentos={agendamentos} />} 
           {visao === 'settings' && <SettingsView />}
+          {visao === 'pacientes' && <PacientesView />}
+          {visao === 'medicos' && <MedicosView />}
         </main>
       </div>
     </div>

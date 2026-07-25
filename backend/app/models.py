@@ -58,3 +58,54 @@ class Convenio(db.Model):
             "pacientes": self.pacientes,
             "status": self.status
         }
+
+class Paciente(db.Model):
+    __tablename__ = 'pacientes'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(150), nullable=False)
+    cpf = db.Column(db.String(20), unique=True, nullable=False)
+    rg = db.Column(db.String(20))
+    data_nascimento = db.Column(db.String(20))
+    telefone = db.Column(db.String(20))
+    email = db.Column(db.String(100))
+    endereco = db.Column(db.String(200))
+    convenio = db.Column(db.String(100))
+    numero_convenio = db.Column(db.String(50))
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "cpf": self.cpf,
+            "rg": self.rg,
+            "data_nascimento": self.data_nascimento,
+            "telefone": self.telefone,
+            "email": self.email,
+            "endereco": self.endereco,
+            "convenio": self.convenio,
+            "numero_convenio": self.numero_convenio
+        }
+
+class Medico(db.Model):
+    __tablename__ = 'medicos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(150), nullable=False)
+    crm = db.Column(db.String(20), unique=True, nullable=False)
+    especialidade = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(20))
+    email = db.Column(db.String(100))
+    dias_atendimento = db.Column(db.String(100))
+
+    def to_dict(self):
+        return{
+            "id": self.id,
+            "nome": self.nome,
+            "crm": self.crm,
+            "especialidade": self.especialidade,
+            "telefone": self.telefone,
+            "email": self.email,
+            "dias_atendimento": self.dias_atendimento
+        }
+        

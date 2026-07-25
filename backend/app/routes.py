@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, login_required
-from .models import Convenio # Não esqueça de importar!
+from .models import Convenio, Paciente
 from . import db
 
 main = Blueprint('main', __name__)
@@ -67,4 +67,67 @@ def add_convenio():
         "status": "success",
         "message": "Convênio criado com sucesso!",
         "data": novo_convenio.to_dict()
+    }), 201
+
+@main.route('/api/pacientes', methods=['GET'])
+def get_pacientes():
+    pacientes_db = Paciente.query.all()
+    return jsonify({
+        "status": "success",
+        "data": [p.to_dict() for p in pacientes_db]
+    }), 200
+
+@main.route('/api/pacientes', methods=['POST'])
+def add_paciente():
+    data = request.get_json()
+    
+    novo_paciente = Paciente(
+        nome=data.get('nome'),
+        cpf=data.get('cpf'),
+        rg=data.get('rg'),
+        data_nascimento=data.get('data_nascimento'),
+        telefone=data.get('telefone'),
+        email=data.get('email'),
+        endereco=data.get('endereco'),
+        convenio=data.get('convenio'),
+        numero_convenio=data.get('numero_convenio')
+    )
+    
+    db.session.add(novo_paciente)
+    db.session.commit()
+    
+    return jsonify({
+        "status": "success",
+        "message": "Paciente cadastrado com sucesso!",
+        "data": novo_paciente.to_dict()
+    }), 201
+
+@main.route('/api/medicos', methods=['GET'])
+def get_medicos():
+    medicos_db = Medico.query.all()
+    return jsonify({
+        "status": "success",
+        "data": [m.to_dict() for m in medicos_db]
+    }), 200
+
+@main.route('/api/medicos', methods=['POST'])
+def add_medicos():
+    data = request.get_json()
+
+    novo_medico = Medico(
+        nome=data.get('nome'),
+        crm=data.get('crm'),
+        especialidade=data.get('especialidade'),
+        telefone=data.get('telefone'),
+        email=data.get('email'),
+        dias_atendimento=data.get('dias_atendimento')
+    )
+
+    db.session.add(novo_medico)
+    db.session.commit()
+
+    return jsonify({
+        "status": "sucess",
+        "message": "Medico cadastrado com sucesso !",
+        "data": novo_medico.to_dict()
     }), 201
