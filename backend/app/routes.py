@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, login_required
-from .models import Convenio, Paciente
+from .models import Convenio, Paciente, Medico
 from . import db
 
 main = Blueprint('main', __name__)
